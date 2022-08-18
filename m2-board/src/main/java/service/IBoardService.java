@@ -1,11 +1,14 @@
 package service;
 
+import java.util.List;
 import java.util.Map;
 
 import vo.Board;
 import vo.Member;
 
 public interface IBoardService {
+	//내정보 - 작성글 목록
+	List<Board> getBoardListByOne(Member member);
 	// 게시글 작성 C
 	int addBoard(Board board);
 

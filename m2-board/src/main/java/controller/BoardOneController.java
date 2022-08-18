@@ -13,13 +13,13 @@ import service.BoardService;
 import service.IBoardService;
 import vo.Board;
 
-
 @WebServlet("/boardOne")
 public class BoardOneController extends HttpServlet {
-	private Board board; 
+	private Board board;
 	private IBoardService boardService;
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// 로그인 정보 저장할 session
 		HttpSession session = request.getSession();
 		// 접근제한
@@ -27,7 +27,8 @@ public class BoardOneController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/login"); // 로그인Controller로 보내기
 			return;
 		}
-		
+		// 인코딩
+		request.setCharacterEncoding("utf-8");
 		// Controller의 역할
 		// 1) 요청을 받아서 분석
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
@@ -36,13 +37,12 @@ public class BoardOneController extends HttpServlet {
 		// 상세보기 누르면 views 하나 올라감 <-- 선행작업
 		// 2) 서비스 레이어를 요청(메서드 호출) -> 모델값(자료구조) 구하기 위함
 		board = new Board();
-		//service call
+		// service call
 		boardService = new BoardService();
-		//상세보기 
+		// 상세보기
 		board = boardService.getBoardOne(boardNo);
 		request.setAttribute("board", board);
-
-		//3) view forwarding -jsp에 요청을 보냄
+		// 3) view forwarding -jsp에 요청을 보냄
 		request.getRequestDispatcher("/WEB-INF/view/boardOne.jsp").forward(request, response);
 	}
 }

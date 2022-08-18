@@ -33,7 +33,7 @@
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -44,6 +44,10 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/index">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                내정보
+                            </a>
                             <a class="nav-link" href="${pageContext.request.contextPath}/boardList">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 공지사항

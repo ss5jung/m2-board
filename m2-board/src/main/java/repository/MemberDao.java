@@ -12,7 +12,7 @@ public class MemberDao implements IMemberDao {
 	@Override
 	public Member selectMemberLogin(Connection conn, Member paramMember) throws Exception {
 		// 리턴 객체
-		Member member = new Member();
+		Member member = null;
 		// DB
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -23,8 +23,9 @@ public class MemberDao implements IMemberDao {
 			stmt.setString(2, paramMember.getMemberPw());
 			System.out.println(stmt + "<-- stmt - #selectMemberLogin");
 			rs = stmt.executeQuery();
-			if (rs.next()) {
+			if (rs.next()) {	//실행이 되면
 				System.out.println("rs실행 성공");
+				member = new Member();
 				member.setMemberId(rs.getString("memberId"));
 				member.setMemberName(rs.getString("memberName"));
 				System.out.println("#로그인 정보" + member);

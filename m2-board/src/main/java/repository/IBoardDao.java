@@ -4,8 +4,12 @@ import java.sql.Connection;
 import java.util.List;
 
 import vo.Board;
+import vo.Member;
 
 public interface IBoardDao {
+	// 로그인한 유저의 작성글목록
+	List<Board> selectBoardListByOne(Connection conn, Member member) throws Exception;
+
 	// 게시글 작성 C
 	int insertBoard(Connection conn, Board board) throws Exception;
 

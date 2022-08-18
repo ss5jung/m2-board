@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@include file="./header.jsp"%>
 <div id="layoutSidenav_content">
 	<main>
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">
-				<b>공지사항</b>
+				<b>상세보기</b>
 			</h1>
 			<ol class="breadcrumb mb-4">
 				<li class="breadcrumb-item"><a href="index.html">공지사항</a></li>
@@ -37,9 +37,13 @@
 					</table>
 					<!-- 버튼 -->
 					<div>
-						<a href="${pageContext.request.contextPath}/modifyBoardOne?boardNo=${board.boardNo}"><button class="btn btn-primary" style="float: right; margin-left: 5px">수정</button></a>
-						<a href="${pageContext.request.contextPath}/removeBoardOne?boardNo=${board.boardNo}"><button class="btn btn-danger" style="float: right;">삭제</button></a>
-						<br><br><hr>
+						<c:if test="${loginMember.memberId eq board.boardWriter}">
+							<a href="${pageContext.request.contextPath}/modifyBoardOne?boardNo=${board.boardNo}"><button class="btn btn-primary" style="float: right; margin-left: 5px">수정</button></a>
+							<a href="${pageContext.request.contextPath}/removeBoardOne?boardNo=${board.boardNo}"><button class="btn btn-danger" style="float: right; margin-left: 5px"">삭제</button></a>
+							
+						</c:if>
+						<a href="${pageContext.request.contextPath}/boardList"><button class="btn btn-secondary" style="float: right; margin-left: 5px">이전</button></a><br> <br>
+						<hr>
 					</div>
 					<!-- 버튼 -->
 					<!-- 댓글 -->

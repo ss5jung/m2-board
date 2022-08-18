@@ -25,9 +25,6 @@ public class MemberService implements IMemberService {
 			conn = dbUtil.getConnection();
 			System.out.println("getMemberLogin DB연결 성공");
 			member = memberDao.selectMemberLogin(conn, paramMember);
-			if (member == null) { // null값이면 예외처리
-				throw new Exception();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

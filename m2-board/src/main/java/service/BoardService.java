@@ -17,6 +17,34 @@ public class BoardService implements IBoardService {
 	private IBoardDao boardDao;
 
 	@Override
+	public List<Board> getBoardListByOne(Member member) {
+		//리턴할 객체
+		List<Board> list = null;
+		//DB
+		Connection conn = null;
+		try {
+			//DB
+			dbUtil = new DBUtil();
+			conn = dbUtil.getConnection();
+			System.out.println("#getBoardListByOne DB 연결 성공");
+			//DAO call
+			boardDao = new BoardDao();
+			list = boardDao.selectBoardListByOne(conn, member);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
 	public int addBoard(Board board) {
 		// 리턴할 객체
 		int row = 0;

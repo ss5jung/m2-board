@@ -7,8 +7,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vo.Board;
+import vo.Member;
 
 public class BoardDao implements IBoardDao {
+
+	@Override
+	public List<Board> selectBoardListByOne(Connection conn, Member member) throws Exception {
+		// 리턴할 객체 생성하기
+		List<Board> list = new ArrayList<Board>();
+		//DB
+		String sql = "SELECT board_no boardNo, board_title boardTitle, create_date createDate, board_views boardViews FROM board WHERE board_writer = ?";
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, member.getMemberId());
+			System.out.println(stmt + "<-- stmt #selectBoardListByOne");
+			rs = stmt.executeQuery();
+			System.out.println(rs + "<-- rs");
+			while (rs.next()) {
+				// Board 객체 생성
+				Board b = new Board();
+				b.setBoardNo(rs.getInt("boardNo"));
+				b.setBoardTitle(rs.getString("boardTitle"));
+				b.setCreateDate(rs.getString("createDate"));
+				b.setBoardViews(rs.getInt("boardViews"));
+				list.add(b);
+				System.out.println("list에 board 추가");
+			}
+		} finally {
+			// DB자원 해제
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
 
 	@Override
 	public int insertBoard(Connection conn, Board board) throws Exception {
@@ -109,7 +146,7 @@ public class BoardDao implements IBoardDao {
 
 	@Override
 	public int selectNice(Connection conn, int boardNo, String memberId) throws Exception {
-		//리턴값 
+		// 리턴값
 		int row = 0;
 		// DB
 		PreparedStatement stmt = null;
@@ -123,7 +160,7 @@ public class BoardDao implements IBoardDao {
 			rs = stmt.executeQuery();
 			if (rs.next()) { // 쿼리가 실행된다면
 				row = rs.getInt("cnt");
-			} 
+			}
 		} finally {
 			if (rs != null) {
 				rs.close();
@@ -148,7 +185,7 @@ public class BoardDao implements IBoardDao {
 			stmt.setString(2, memberId);
 			System.out.println(stmt + "<-- stmt #deleteNice");
 			row = stmt.executeUpdate();
-			if (row == 0) {	//좋아요 취소에 실패했다면
+			if (row == 0) { // 좋아요 취소에 실패했다면
 				throw new Exception();
 			}
 		} finally {

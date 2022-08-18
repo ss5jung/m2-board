@@ -52,7 +52,7 @@ public class LoginController extends HttpServlet {
 		Member member = memberService.getMemberLogin(paramMember);
 		//예외처리
 		if (member == null) {
-			System.out.println("로그인 실패");
+			System.out.println("로그인 실패!");
 			//재실행
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
