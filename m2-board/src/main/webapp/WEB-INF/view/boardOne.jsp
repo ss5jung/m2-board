@@ -35,8 +35,17 @@
 							<td colspan="6">${board.boardNice}</td>
 						</tr>
 					</table>
+					<!-- 버튼 -->
+					<div>
+						<a href="${pageContext.request.contextPath}/modifyBoardOne?boardNo=${board.boardNo}"><button class="btn btn-primary" style="float: right; margin-left: 5px">수정</button></a>
+						<a href="${pageContext.request.contextPath}/removeBoardOne?boardNo=${board.boardNo}"><button class="btn btn-danger" style="float: right;">삭제</button></a>
+						<br><br><hr>
+					</div>
+					<!-- 버튼 -->
 					<!-- 댓글 -->
-					<p style="margin-top : 10px;margin-bottom : 15px; font-size: 20px"><b>댓글</b></p>
+					<p style="margin-top: 10px; margin-bottom: 15px; font-size: 20px">
+						<b>댓글</b>
+					</p>
 					<form action="" method="">
 						<textarea rows="5" style="width: 100%"></textarea>
 						<button type="submit" class="btn btn-secondary" style="float: right;">등록</button>

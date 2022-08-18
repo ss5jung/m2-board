@@ -5,19 +5,29 @@
 	<main>
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">
-				<b>Dashboard</b>
+				<b>회원정보</b>
 			</h1>
 			<ol class="breadcrumb mb-4">
 				<li class="breadcrumb-item active">Dashboard</li>
 			</ol>
-			<!-- 로그인 정보 -->
 			<div class="row">
-				<p><b>${loginMember.memberName}</b>님</p>
-			</div>
-			<!-- /로그인 정보 -->
-			<div class="row">
-				<table class="table table-striped">
-					<caption></caption>
+				<table class="table table-hover">
+					<thead class="table-active">
+						<tr>
+							<th>아이디</th>
+							<th>이름</th>
+							<th>비밀번호</th>
+							<th>회원탈퇴</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>${loginMember.memberId}</td>
+							<td>${loginMember.memberName}</td>
+							<td><button class="btn btn-warning">비밀번호 수정</button></td>
+							<td><button class="btn btn-danger">회원탈퇴</button></td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
