@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.BoardService;
 import service.IBoardService;
@@ -19,6 +20,14 @@ public class BoardOneController extends HttpServlet {
 	private IBoardService boardService;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 로그인 정보 저장할 session
+		HttpSession session = request.getSession();
+		// 접근제한
+		if (session.getAttribute("loginMember") == null) { // 로그인이 안된 상태라면
+			response.sendRedirect(request.getContextPath() + "/login"); // 로그인Controller로 보내기
+			return;
+		}
+		
 		// Controller의 역할
 		// 1) 요청을 받아서 분석
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));

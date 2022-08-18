@@ -85,16 +85,15 @@ public class BoardDao implements IBoardDao {
 	}
 
 	@Override
-	public void updateNice(Connection conn, int boardNo, int boardNice) throws Exception {
+	public int updateNice(Connection conn, int boardNo, String memberId) throws Exception {
 		int row = 0;
-		int newNice = boardNice + 1;
 		// DB
 		PreparedStatement stmt = null;
-		String sql = "UPDATE board SET board_nice= ? WHERE board_no=?";
+		String sql = "INSERT INTO nice (board_no, member_id, create_date) VALUES (?, ?, now())";
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, newNice);
-			stmt.setInt(2, boardNo);
+			stmt.setInt(1, boardNo);
+			stmt.setString(2, memberId);
 			System.out.println(stmt + "<-- stmt #updateNice");
 			row = stmt.executeUpdate();
 			if (row == 0) {
@@ -105,6 +104,59 @@ public class BoardDao implements IBoardDao {
 				stmt.close();
 			}
 		}
+		return row;
+	}
+
+	@Override
+	public int selectNice(Connection conn, int boardNo, String memberId) throws Exception {
+		//리턴값 
+		int row = 0;
+		// DB
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT COUNT(*) cnt FROM nice WHERE board_no = ? and member_id =?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, boardNo);
+			stmt.setString(2, memberId);
+			System.out.println(stmt + "<-- stmt #selectNice");
+			rs = stmt.executeQuery();
+			if (rs.next()) { // 쿼리가 실행된다면
+				row = rs.getInt("cnt");
+			} 
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
+	}
+
+	@Override
+	public int deleteNice(Connection conn, int boardNo, String memberId) throws Exception {
+		// 리턴 객체
+		int row = 0;
+		// DB
+		PreparedStatement stmt = null;
+		String sql = "DELETE FROM nice WHERE  board_no=? AND member_id=?";
+		try {
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, boardNo);
+			stmt.setString(2, memberId);
+			System.out.println(stmt + "<-- stmt #deleteNice");
+			row = stmt.executeUpdate();
+			if (row == 0) {	//좋아요 취소에 실패했다면
+				throw new Exception();
+			}
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return row;
 	}
 
 	@Override
@@ -136,7 +188,7 @@ public class BoardDao implements IBoardDao {
 		Board board = null;
 		// DB
 		PreparedStatement stmt = null;
-		String sql = "SELECT board_no boardNo,board_title boardTitle, board_contents boardContents ,board_writer boardWriter, create_date createDate ,board_views boardViews, board_nice boardNice FROM board WHERE board_no = ?";
+		String sql = "SELECT b.board_no boardNo, b.board_title boardTitle, b.board_contents boardContents, b.create_date createDate, b.board_writer boardWriter,b.board_views boardViews, IFNULL(t.cnt, 0) boardNice from board b LEFT JOIN (select board_no, count(*) cnt from nice group by board_no) t using(board_no) WHERE board_no = ?";
 		ResultSet rs = null;
 		try {
 			stmt = conn.prepareStatement(sql);
@@ -173,7 +225,8 @@ public class BoardDao implements IBoardDao {
 	public List<Board> selectBoardListByPage(Connection conn, int rowPerPage, int beginRow) throws Exception {
 		// 리턴할 객체 생성하기
 		List<Board> list = new ArrayList<Board>();
-		String sql = "SELECT board_no boardNo, board_title boardTitle,board_writer boardWriter,create_date createDate,board_views boardViews,board_nice boardNice FROM board ORDER BY create_date DESC LIMIT ?,?";
+
+		String sql = "SELECT b.board_no boardNo, b.board_title boardTitle, b.create_date createDate, b.board_writer boardWriter,b.board_views boardViews, IFNULL(t.cnt, 0) boardNice from board b LEFT JOIN (select board_no, count(*) cnt from nice group by board_no) t using(board_no) ORDER BY b.create_date DESC LIMIT ?,?";
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {

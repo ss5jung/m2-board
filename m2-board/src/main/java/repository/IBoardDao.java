@@ -24,8 +24,14 @@ public interface IBoardDao {
 	// lastPage 구하기
 	int selectBoardCnt(Connection conn) throws Exception;
 
+	// 기존에 좋아요를 한적이 있는지 확인
+	int selectNice(Connection conn, int boardNo, String memberId) throws Exception;
+
 	// 좋아요 수 올리기
-	void updateNice(Connection conn, int boardNo, int boardNice) throws Exception;
+	int updateNice(Connection conn, int boardNo, String memberId) throws Exception;
+
+	// 좋아요 취소
+	int deleteNice(Connection conn, int boardNo, String memberId) throws Exception;
 
 	// 조회수 올리기
 	void updateViews(Connection conn, int boardNo, int boardViews) throws Exception;

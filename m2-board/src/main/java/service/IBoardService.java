@@ -3,6 +3,7 @@ package service;
 import java.util.Map;
 
 import vo.Board;
+import vo.Member;
 
 public interface IBoardService {
 	// 게시글 작성 C
@@ -22,7 +23,7 @@ public interface IBoardService {
 	// 게시글 삭제 D
 	int removeBoard(int boardNo);
 	
-	//좋아요 수 올리기
-	void modifyNice(int boardNo, int boardNice);
+	//좋아요 수 수정
+	int modifyNice(int boardNo, Member paramMember);
 	
 }

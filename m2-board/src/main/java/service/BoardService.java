@@ -10,6 +10,7 @@ import commons.DBUtil;
 import repository.BoardDao;
 import repository.IBoardDao;
 import vo.Board;
+import vo.Member;
 
 public class BoardService implements IBoardService {
 	private DBUtil dbUtil;
@@ -44,7 +45,11 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public void modifyNice(int boardNo, int boardNice) {
+	public int modifyNice(int boardNo, Member paramMember) {
+		// 리턴값
+		int row = 0;
+		// 파라미터
+		String memberId = paramMember.getMemberId();
 		// DB
 		Connection conn = null;
 		try {
@@ -54,9 +59,26 @@ public class BoardService implements IBoardService {
 			// DB
 			conn = dbUtil.getConnection();
 			System.out.println("#modifyNice DB 연결 성공");
-			boardDao.updateNice(conn, boardNo, boardNice);
+			// 개별 커밋 해제
+			conn.setAutoCommit(false);
+			// DAO call
+			// 좋아요를 누른적이 있는지 확인
+			if (boardDao.selectNice(conn, boardNo, memberId) == 0) { // 좋아요를 누른적이 없다면
+				System.out.println("좋아요 실행 start");
+				row = boardDao.updateNice(conn, boardNo, memberId);
+			} else { // 좋아요를 누른적이 있다면
+				System.out.println("좋아요 취소 start");
+				row = boardDao.deleteNice(conn, boardNo, memberId); // 좋아요 삭제하기
+			}
+			//이전 전체 커밋
+			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 		} finally {
 			if (conn != null) {
 				try {
@@ -66,6 +88,7 @@ public class BoardService implements IBoardService {
 				}
 			}
 		}
+		return row;
 	}
 
 	@Override
@@ -149,7 +172,7 @@ public class BoardService implements IBoardService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {
-				conn.rollback();	//예외 발생시 rollback하기
+				conn.rollback(); // 예외 발생시 rollback하기
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -181,16 +204,30 @@ public class BoardService implements IBoardService {
 			// DB 연결
 			conn = dbUtil.getConnection();
 			System.out.println("#getBoardList - DB 연결 성공");
-			// 게시글 리스트 DAO에서 받아오기
+			// 개별 커밋 해제
+			conn.setAutoCommit(false);
+			// 게시글 리스트 DAO call
 			List<Board> list = boardDao.selectBoardListByPage(conn, rowPerPage, beginRow);
 			if (list != null) {
 				map.put("list", list);
+			} else { // 리스트가 받아오는 값이 없으면
+				throw new Exception(); // 예외처리
 			}
 			// lastPage DAO에서 받아오기
 			int lastPage = boardDao.selectBoardCnt(conn);
+			if (lastPage == 0) {
+				throw new Exception();
+			}
 			map.put("lastPage", lastPage);
+			// 전체 커밋
+			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				conn.rollback(); // 예외처리되면 rollback하기
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 		} finally {
 			// DB자원 해제
 			if (conn != null) {

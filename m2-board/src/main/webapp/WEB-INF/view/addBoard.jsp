@@ -1,30 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<form action="<%=request.getContextPath()%>/addBoard" method="post">
-		<fieldset>
-			<legend>글 작성</legend>
-			<table border="1">
-				<tr>
-					<th>제목</th>
-					<td><input type="text" id="boardTitle" name="boardTitle" ></td>
-				</tr>
-				<tr>
-					<th>내용</th>
-					<td><input type="text" id="boardContents" name="boardContents" ></td>
-				</tr>
-				<tr>
-					<th>작성자</th>
-					<td><input type="text" id="boardWriter" name="boardWriter" ></td>
-				</tr>
-			</table>
-			<button type="submit">제출</button>
-		</fieldset>
-	</form>
-</body>
-</html>
+<%@taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@include file="./header.jsp"%>
+<div id="layoutSidenav_content">
+	<main>
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">
+				<b>카페 글쓰기</b>
+			</h1>
+			<hr>
+			<div class="card mb-4">
+				<div class="card-body">
+					<form action="<%=request.getContextPath()%>/addBoard" method="post">
+						<fieldset>
+							<div style="margin-bottom: 5px">
+								<label for="boardWriter">작성자</label>
+								<input type="text" id="boardWriter" name="boardWriter" value="${loginMember.memberId}" readonly="readonly">
+							</div>
+							<hr>
+							<div style="margin-bottom: 5px">
+								<label for="boardTitle">제목</label>
+								<input type="text" class="form-control" id="boardTitle" name="boardTitle" placeholder="제목을 입력해 주세요">
+							</div>
+							<div style="margin-bottom: 5px">
+								<label for="boardContents">내용</label>
+								<textarea rows="5" class="form-control" id="boardContents" name="boardContents" style="width: 100%"></textarea>
+							</div>
+							<div>
+								<button class="btn btn-success" type="submit">제출</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	<%@include file="./footer.jsp"%>

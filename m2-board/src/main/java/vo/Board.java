@@ -9,22 +9,9 @@ public class Board {
 	private String createDate;
 	private int boardViews;
 	private int boardNice;
-	//기본생성자
 	public Board() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	//파라미터 생성자
-	public Board(int boardNo, String boardTitle, String boardContents, String boardWriter, String createDate,
-			int boardViews, int boardNice) {
-		super();
-		this.boardNo = boardNo;
-		this.boardTitle = boardTitle;
-		this.boardContents = boardContents;
-		this.boardWriter = boardWriter;
-		this.createDate = createDate;
-		this.boardViews = boardViews;
-		this.boardNice = boardNice;
 	}
 	public int getBoardNo() {
 		return boardNo;
@@ -74,7 +61,4 @@ public class Board {
 				+ ", boardWriter=" + boardWriter + ", createDate=" + createDate + ", boardViews=" + boardViews
 				+ ", boardNice=" + boardNice + "]";
 	}
-	
-
-	
 }
