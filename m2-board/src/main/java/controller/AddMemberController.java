@@ -18,6 +18,7 @@ public class AddMemberController extends HttpServlet {
 	// addForm
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//forwarding
 		request.getRequestDispatcher("/WEB-INF/view/addMember.jsp").forward(request, response);
 	}
 
@@ -31,6 +32,9 @@ public class AddMemberController extends HttpServlet {
 		member.setMemberId(request.getParameter("memberId"));
 		member.setMemberName(request.getParameter("memberName"));
 		member.setMemberPw(request.getParameter("memberPw"));
+		member.setMemberPhone(request.getParameter("memberPhone"));
+		String memberAddress = request.getParameter("memberAddr") + " "+ request.getParameter("memberDetailAddr");
+		member.setMemberAddress(memberAddress);
 		System.out.println(member);
 
 		// 2) 서비스 레이어를 요청(메서드 호출) -> 모델값(자료구조) 구하기 위함

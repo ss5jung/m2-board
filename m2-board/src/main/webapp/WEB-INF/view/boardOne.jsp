@@ -40,7 +40,6 @@
 						<c:if test="${loginMember.memberId eq board.boardWriter}">
 							<a href="${pageContext.request.contextPath}/modifyBoardOne?boardNo=${board.boardNo}"><button class="btn btn-primary" style="float: right; margin-left: 5px">수정</button></a>
 							<a href="${pageContext.request.contextPath}/removeBoardOne?boardNo=${board.boardNo}"><button class="btn btn-danger" style="float: right; margin-left: 5px"">삭제</button></a>
-							
 						</c:if>
 						<a href="${pageContext.request.contextPath}/boardList"><button class="btn btn-secondary" style="float: right; margin-left: 5px">이전</button></a><br> <br>
 						<hr>

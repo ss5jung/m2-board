@@ -12,8 +12,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class LogoutController extends HttpServlet {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		session.invalidate(); // 원래 session의 값을 지우기 - session reset
 		System.out.println("session 초기화 - 로그아웃 성공");
